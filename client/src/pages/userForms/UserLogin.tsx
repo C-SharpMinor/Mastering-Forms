@@ -20,8 +20,28 @@ const UserLogin = () => {
 	const onFinishHandler = async (data: FieldValues) => {};
 
 	return (
-		<Create>
-			<TextField label="Username" />
+		<Create
+			isLoading={formLoading}
+			saveButtonProps={{
+				...saveButtonProps,
+				onClick: handleSubmit(onFinishHandler),
+			}}
+		>
+			<TextField
+				label="Username"
+				{...register("username", { required: "The username is required" })}
+				margin="normal"
+			/>
+			<TextField
+				label="Email"
+				{...register("email", { required: "The email is required" })}
+				margin="normal"
+			/>
+			<TextField
+				label="Password"
+				{...register("password", { required: "The email is required" })}
+				margin="normal"
+			/>
 		</Create>
 	);
 };
