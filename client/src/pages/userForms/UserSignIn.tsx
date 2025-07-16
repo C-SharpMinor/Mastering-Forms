@@ -8,7 +8,7 @@ import { Box, TextField, MenuItem } from "@mui/material";
 import { Toaster } from "react-hot-toast";
 import toast from "react-hot-toast";
 
-const UserLogin = () => {
+const UserSignIn = () => {
 	const {
 		register,
 		saveButtonProps,
@@ -17,7 +17,22 @@ const UserLogin = () => {
 		formState: { errors },
 	} = useForm();
 
-	const onFinishHandler = async (data: FieldValues) => {};
+	const onFinishHandler = async (data: FieldValues) => {
+		try{
+			const res= await fetch("localhost:5001/api/v1/auth/sign-in", {
+				method: 'POST',
+				headers: {"Content-Type": "application/json", "Bearer":},
+				body: JSON.stringify(data)
+			})
+			if(!res.ok){
+				const error= await res.json()
+				toast.error(error.message)	
+			}
+		}catch(error){
+			toast.error('Something went wrong')	
+			console.log(error.message)
+		}
+	};
 
 	return (
 		<Create
@@ -46,4 +61,4 @@ const UserLogin = () => {
 	);
 };
 
-export default UserLogin;
+export default UserSignIn;
