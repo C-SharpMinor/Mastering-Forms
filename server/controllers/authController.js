@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 const signin = async (req, res) => {
 	try {
-		const { email, password } = req.body;
+		const { username, email, password } = req.body;
 		const user = await User.findOne({ email });
 		if (!user) {
 			return res.status(400).json({ msg: "User not found" });
@@ -14,8 +14,8 @@ const signin = async (req, res) => {
 			console.log("Incorrect password");
 			return res.status(401).json({ msg: "Invalid Credentials" });
 		}
-		const token = await jwt.sign(
-			{ _id: user._id },
+		const token = jwt.sign(
+			{ _id: user._id, username: user.username, email: user.email, isAdmin: user.isAdmin },
 			process.env.JWT_SECRET_KEY,
 			{ expiresIn: "1h" }
 		);
@@ -39,9 +39,9 @@ const signup = async (req, res) => {
 		const newUser = await User.create({ ...req.body, password: hashedPwd });
 
 		const token = await jwt.sign(
-			{ _id: newUser._id },
+			{ _id: newUser._id, username }, //this payload not only tells jwt what to use/encrypt to make the token but it also attaches the token to whatever identity provided here. So it is extracted in AuthMiddleware
 			process.env.JWT_SECRET_KEY,
-			{ expiresIn: "1h" }
+			{ expiresIn: "20s" }
 		);
 
 		res.status(201).json({ msg: "User registered successfully", token });

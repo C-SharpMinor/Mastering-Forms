@@ -42,8 +42,27 @@ const createUser = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-	const { email } = req.body;
-	const user = User.update({ email });
+	
+	try{
+		const userId= req.params.id
+		const updates= req.body
+
+		const updatesUser = await User.findByIdAndUpdate(
+			userId, req.body, 
+			{new: true, runValidators: true}
+		)//so the format of this is the id, the new data and the options. You just have to remember that 'options' always
+
+		if(!updatedUser){
+			return res.status(404).json({msg: "User not found"})
+		}
+
+		const {...rest, password}= updatedUser._doc
+		res.status(200).json(msg:"User successfully updated", user: rest)
+	}
+	catch(error){
+		console.log(error.message)
+		return res.status(500).json("Internal Server Error")
+	}
 };
 
 const deleteUser = async (req, res) => {};
