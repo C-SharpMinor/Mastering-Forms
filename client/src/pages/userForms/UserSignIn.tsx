@@ -7,6 +7,8 @@ import { Box, TextField, MenuItem } from "@mui/material";
 
 import { Toaster } from "react-hot-toast";
 import toast from "react-hot-toast";
+import {useNavigate} from 'react-router-dom'
+import {Button} from "@mui/material"
 
 const UserSignIn = () => {
 	const {
@@ -17,47 +19,53 @@ const UserSignIn = () => {
 		formState: { errors },
 	} = useForm();
 
+	const navigate= useNavigate()
 	const onFinishHandler = async (data: FieldValues) => {
 		try{
-			const res= await fetch("localhost:5001/api/v1/auth/sign-in", {
+			const res= await fetch("http://localhost:5001/api/v1/auth/sign-in", {
 				method: 'POST',
-				headers: {"Content-Type": "application/json", "Bearer":},
+				headers: {"Content-Type": "application/json"},
 				body: JSON.stringify(data)
 			})
 			if(!res.ok){
 				const error= await res.json()
 				toast.error(error.message)	
 			}
+			const result= await res.json()
+			localStorage.setItem('token', result.token)
+			toast.success('Login Successful')
+			setTimeout(()=>{
+				navigate('/user-forms')
+			}, 2000)
+
+
 		}catch(error){
 			toast.error('Something went wrong')	
-			console.log(error.message)
+			console.log(error)
 		}
 	};
 
 	return (
+		<>
+		<Toaster position="top-center" reverseOrder={false}/>
 		<Create
 			isLoading={formLoading}
-			saveButtonProps={{
-				...saveButtonProps,
-				onClick: handleSubmit(onFinishHandler),
-			}}
-		>
-			<TextField
-				label="Username"
-				{...register("username", { required: "The username is required" })}
-				margin="normal"
-			/>
-			<TextField
+			>
+			<form onSubmit={handleSubmit(onFinishHandler)}>
+				<TextField
 				label="Email"
 				{...register("email", { required: "The email is required" })}
 				margin="normal"
-			/>
-			<TextField
+				/>
+				<TextField
 				label="Password"
 				{...register("password", { required: "The email is required" })}
 				margin="normal"
-			/>
+				/>
+			<Button type="submit" color="primary"> Login </Button>
+			</form>
 		</Create>
+		</>
 	);
 };
 

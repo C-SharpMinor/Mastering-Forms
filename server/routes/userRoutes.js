@@ -9,13 +9,10 @@ const {
 } = require("../controllers/userControllers");
 const AuthMiddleware = require("../middleware/auth");
 
-router
-	.route("/")
-	.get(AuthMiddleware, getAllUsers)
+router.route("/").get(AuthMiddleware, getAllUsers);
 
-router.route("update/users/:id").patch(AuthMiddleware, updateUser)
-	.get(AuthMiddleware, getUser)
-	
-	.delete(AuthMiddleware, deleteUser);
+router.route("/update/:id").patch(AuthMiddleware, updateUser);
+router.route("/:id").get(AuthMiddleware, getUser);
+router.route("/delete/:id").delete(AuthMiddleware, deleteUser);
 
 module.exports = router;

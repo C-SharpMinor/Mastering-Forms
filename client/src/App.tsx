@@ -43,8 +43,8 @@ import {
 import { Login } from "./pages/login";
 import { parseJwt } from "./utils/parse-jwt";
 
-import CreateUser from "./pages/userForms/createUser";
-import UserLogin from "./pages/userForms/UserSignin";
+import CreateUser from "./pages/userForms/UpdateUser";
+import UserSignIn from "./pages/userForms/UserSignIn";
 
 const axiosInstance = axios.create();
 axiosInstance.interceptors.request.use((config) => {
@@ -200,7 +200,7 @@ function App() {
 										</Route>
 										<Route path="/user-forms">
 											<Route index element={<CreateUser />} />
-											<Route path="login" element={<UserLogin />} />
+											<Route path="sign-in" element={<UserSignIn />} />
 											{/* <Route path="create" element={<CategoryCreate />} />
 											<Route path="edit/:id" element={<CategoryEdit />} />
 											<Route path="show/:id" element={<CategoryShow />} */}
