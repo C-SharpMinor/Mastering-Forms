@@ -7,6 +7,7 @@ import { Toaster } from "react-hot-toast";
 import toast from "react-hot-toast";
 import { error } from "console";
 import {Button} from '@mui/material'
+import {jwt_decode} from 'jwt-decode'
 
 const UpdateUser = () => {
 	const {
@@ -32,7 +33,10 @@ const UpdateUser = () => {
 				isAdmin: data.role === "admin",
 			};
 			const token= localStorage.getItem('token')
-			const res = await fetch("http://localhost:5001/api/v1/users", {
+			console.log(token)
+			const userID= jwt_decode(token).id
+			console.log(userID)
+			const res = await fetch(`http://localhost:5001/api/v1/users/update/${userID}`, {
 				method: "PATCH",
 				headers: { Authorization: `Bearer ${token}`,
 					"Content-Type": "application/json" },
@@ -43,10 +47,10 @@ const UpdateUser = () => {
 				toast.error(error.message);
 				throw new Error(error.message);
 			}
-			toast.success("User successfully updated!");
+			toast.success("User successfully updated!"); 
 		} catch (error) {
 			console.log(error);
-			toast.error("Failed to create user");
+			toast.error("Failed to update user");
 		}
 	};
 
