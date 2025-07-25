@@ -7,7 +7,7 @@ import { Toaster } from "react-hot-toast";
 import toast from "react-hot-toast";
 import { error } from "console";
 import {Button} from '@mui/material'
-import {jwt_decode} from 'jwt-decode'
+import {jwtDecode} from 'jwt-decode'
 
 const UpdateUser = () => {
 	const {
@@ -34,7 +34,7 @@ const UpdateUser = () => {
 			};
 			const token= localStorage.getItem('token')
 			console.log(token)
-			const userID= jwt_decode(token).id
+			const userID= jwtDecode(token).id
 			console.log(userID)
 			const res = await fetch(`http://localhost:5001/api/v1/users/update/${userID}`, {
 				method: "PATCH",
